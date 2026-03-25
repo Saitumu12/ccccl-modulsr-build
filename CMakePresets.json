@@ -1,0 +1,54 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "linux-release",
+      "inherits": "base",
+      "displayName": "Linux Release",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CUDA_ARCHITECTURES": "80;90"
+      }
+    },
+    {
+      "name": "windows-release",
+      "inherits": "base",
+      "displayName": "Windows Release",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl.exe",
+        "CMAKE_CUDA_ARCHITECTURES": "80;90"
+      }
+    },
+    {
+      "name": "ci-full",
+      "inherits": "base",
+      "displayName": "CI Full Matrix",
+      "cacheVariables": {
+        "CMAKE_CUDA_ARCHITECTURES": "70;75;80;86;89;90",
+        "CCCL_ENABLE_CLANG_TIDY": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "linux-release", "configurePreset": "linux-release" },
+    { "name": "windows-release", "configurePreset": "windows-release" },
+    { "name": "ci-full", "configurePreset": "ci-full" }
+  ],
+  "testPresets": [
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "output": { "outputOnFailure": true }
+    }
+  ]
+}
